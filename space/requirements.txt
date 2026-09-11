@@ -1,0 +1,4 @@
+# The package comes from GitHub, pinned to a commit: an unchanged requirements file reuses the
+# cached build layer on Spaces, so bump the sha for a rebuild to pick up new code.
+ace-ego-hand[gradio] @ git+https://github.com/julien-blanchon/ACE-Ego-Hand-Pipeline@main
+spaces

@@ -1,0 +1,80 @@
+[project]
+name = "ace-ego-hand"
+version = "0.1.0"
+description = "ACE-Ego-Hand inference: bimanual 3D hand motion from egocentric video, reimplemented with minimal dependencies"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Julien Blanchon", email = "julien@blanchon.cc" }]
+requires-python = ">=3.12"
+dependencies = [
+    "av>=15.0.0",
+    "einops>=0.8.0",
+    "huggingface-hub[torch,hf_xet]>=1.0.0",
+    "jaxtyping>=0.3.0",
+    "numpy>=2.1",
+    "pyarrow>=21.0.0",
+    "safetensors>=0.5.0",
+    "torch>=2.11.0",
+    "torchvision>=0.26.0",
+    "tyro>=1.0.0",
+]
+
+[project.optional-dependencies]
+gradio = ["gradio>=6.0.0,<7"]
+int8 = ["torchao>=0.16"]
+
+[project.scripts]
+ace-ego-hand = "ace_ego_hand.scripts.cli:main"
+
+[project.urls]
+Repository = "https://github.com/julien-blanchon/ACE-Ego-Hand-Pipeline"
+Weights = "https://huggingface.co/blanchon/ACE-Ego-Hand-Safetensors"
+Demo = "https://huggingface.co/spaces/blanchon/ACE-Ego-Hand"
+Upstream = "https://github.com/ggxxii/ACE-Ego-Hand"
+
+[dependency-groups]
+dev = ["basedpyright>=1.39", "ruff>=0.15"]
+
+[build-system]
+requires = ["uv_build>=0.11.29,<0.12.0"]
+build-backend = "uv_build"
+
+
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["context"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4", "C90", "RUF", "PIE", "PERF", "NPY", "FURB", "PTH", "RET", "ANN"]
+# F722/F821: jaxtyping shape strings look like undefined names. UP037: would strip quotes from
+# single-axis jaxtyping annotations. ANN002/ANN003/ANN401: *args/**kwargs/Any stay unannotated.
+# E501: the formatter owns line length; dense tensor expressions read better unwrapped.
+ignore = ["F722", "F821", "UP037", "ANN002", "ANN003", "ANN401", "E501"]
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
+known-first-party = ["ace_ego_hand"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12
+
+[tool.basedpyright]
+include = ["src", "space"]
+exclude = ["context", ".venv"]
+reportAny = false
+reportCallInDefaultInitializer = false
+reportExplicitAny = false
+reportUnannotatedClassAttribute = false
+reportUnusedCallResult = false
+reportImplicitOverride = false
+reportUnknownArgumentType = false
+reportUnknownMemberType = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
+reportMissingParameterType = false
+reportMissingTypeStubs = false
+reportPrivateUsage = false
+reportUnreachable = false
+reportImplicitStringConcatenation = false
+reportUninitializedInstanceVariable = false

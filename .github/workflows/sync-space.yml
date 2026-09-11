@@ -1,0 +1,24 @@
+# Mirrors `space/` to the Hugging Face Space on every push to main. The package requirement is
+# pinned to the pushed commit first, so the Space rebuilds against exactly this code (an unchanged
+# requirements file would reuse the cached build layer).
+name: Sync the Space
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Pin the package to this commit
+        run: sed -i "s|ACE-Ego-Hand-Pipeline@main|ACE-Ego-Hand-Pipeline@${GITHUB_SHA}|" space/requirements.txt
+      - uses: huggingface/hub-sync@v0.3.0
+        with:
+          github_repo_id: ${{ github.repository }}
+          huggingface_repo_id: blanchon/ACE-Ego-Hand
+          repo_type: space
+          space_sdk: gradio
+          subdirectory: space
+          delete_removed: false
+          hf_token: ${{ secrets.HF_TOKEN }}
